@@ -39,7 +39,7 @@ interface AcidDrainContext {
   };
 }
 
-// Типы для событий
+
 type AcidDrainEvent =
   | { type: "START" }
   | { type: "COLLECT_SCHEME_6_1V" }
@@ -78,7 +78,7 @@ type AcidDrainEvent =
   | { type: "CLOSE_6" }
   | { type: "COMPLETE" };
 
-// Начальное состояние с типами
+
 const initialContext: AcidDrainContext = {
   tanks: {
     "6.1A": { level: 7.0, max: 8.05, color: "blue" },
@@ -122,6 +122,7 @@ const initialContext: AcidDrainContext = {
 
 export const acidDrainMachine = createMachine(
   {
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMDGBLCARATs9AdgHSYA2YAxAMoAqAggEo0DaADALqKgAOA9rOgAu6XgS4gAHogCMAFgDsRAKwBONSvnSVADiXbp8pQBoQAT0SztrIgGZ5rVtIBMsp9JuqnANgC+Pk2iYuPjEsILIMNIUAMIA8gAy8QCi0TQA+lTRABJJALJJaV5p0gBqbJxIIHwCwqLiUghOOk62ho5eSkr2SjYm5gh21l72DtperCpyXX4BGNh4hERhEWBRsQAKSQByxU7l4tVCImKVDTaOKkRqdsNKTk42Xip9iE7yskT3Dqx32mrOchmIEC8xCS3CkRi8ViVAK7n2lUOtROoDOrCc1nchmkt3kTm07xeCAMinkIwu9mGuiBIOCi2WkOi0NhxVkCJ4-COdVOiHOGKIjicShxhkmxjMiH0ti0ajGwtkCpUThpczpoQhqwoWySAA0WBwDpzkfULB0iPICUoHF5tN5VAoibIVEoiK4HM5NPpZKx5Cqggt1SsnDEEslUhlsnkCkUlOyqkbjibieiWtpLaxvVabG5nhLibIesoRo8VLJBm8-aD6RrgxttsU40jEzzk+MiAYrT8LR53NIie4uu2MawbI8XLInsr-MDVQHwUGKHWdrGDYiE9zUTIfpdvEKfdmmn9ZP3vENiyOfg9OpW1fOYMGmTCCjY0ntVxyas3N8nC3pnHdWGGH1AP7HEPi+dEnjGBwp1mf0wQZMBa02HYbEbdcUUkLdVE+Lw93kA8dFLftANJEYHi8Sj5BtGwbznRDkPrF9pHQz8Nywn8Pg8PCej-b0+zzDRpFsYcMRsBQeidOiEJrRcUNfBt33jNjMIaaQfi4pQeI8L1HCJAkPgJd17Hxc53Gk6sFyXV9WK5VTsJ3Hj93uIjjzzMltFdYcsQmUjfWnWl6Nk7U9Vs40WyFFoNE7bMumorxejzaQuk87MHFkdS7igizAxgGwiG4ABXABbbgqHCHBBAodYAFVcnWDJ6CYJIsDCr8OM0S4PHdbxtAndxEv6HEbGE7wDAmKDpDkWQcrvMB8t4bgwAIEpkFIAA3MBZAoEo6HiEoCiXFq2vYtTWClKbIscTRhSUNyhoS0avHGlRJum2bEIWpaVrWzbZGKCgADEAElEjSOJ6uSGgkhO+z81HV07GFIVvSFW1+xtTy8PSgsDDcaiPo1L7ltWjatoBiRlkEMAiGQAAzamcAACmHBwAEoKECmSVmJn6yf+lilKbU6ZDLfKy2xFH0T0Jx+1UF1xozKaenxQDCZ5ohUFIfgwFJv6Ad2-aCkfWFWqFjCk2kPrrG+BxqPeCYLQx7MBWdDNzhGhV5BUdWYG2k2CjZc2VKTb0JiIXR3VHPDnq8OX7lsN2unRZWJ19rbqBoDY0jGaJYdDhx8vOyWRgVOOktcF1SytHp7C0Nx0-95kCjfCoPzsgvw+ixxo59Hpy6G7NLidGuR1tG13kbqEnwUwW2+UjuWzDl1AIJBKxbGFwTwRjMrQUQDxLuqeA7SZj86XhwV4n9fR03+6ZHcLxlDdiWFS+WCZ3gyy-enlk0ODxe34w6XG7gNcYhhHgkW9O2AsGYMwuB0MMY+zc0grnnsLOGwCrhtDAX3SBgkyxECeFmTQXYVbIJnnPQ0IcL7qQjioG4GV1KF30goT4sDRwWg6FoXwAVZzcx-iFfU6CLYtjuESUSRDhwFitF6Sw6clAhkSCkdImQcj5DSDQBgdAthUEBkkBg58gE2E8m0Rw7RHrdAkTBKR6VOjnWmtodOT9FrLQAOI4F4IVbgURDYHSoGkI6ZsRE0O-CNUxTo1A2jLt7AS-QmgWlsQfKwVsRy8LglWXKYAn5ax1nrMA8gdp7QOuDZuwTqGAI4jaF02gkaCnSu8bQEiNBY2HAlFJVhHjOKIK4vmm11JFKNoElCx0AHhW-OpSwXlOxaQeLFe+jQWlJPaY4Tp6TP6ZLmk-ZYlV1glW4Aw6qdUGq0EYNDcpa5QkcTkHIT46YTEMN0K9ZpiTsbJNWWk7pvT8lTV-nCKhlzKlqSsJ5JUVp1J-HOmMZpDCiEjC8N6HQeg058K-lklx30flREpuEamtMGZgGZqzVgHMubf2yT0zFv1VgAvbuM65z1TG2wIg8JUPwJEEmEmy7cpZLBjBmqizZiEcnawEAQKAVAwAAEdCrLVQJQWg2cGFGOuc6S4Vs2gtLxBPDltTsHWnRGMOw5lBW3mFZrUVhAJXStlQQeVfziisBVWpNVVw6kaGohMfEEiLSKAAj8J4wx3BONNUFFYIrOTislTKuVlAT7aGdTIV6LRuqjDcK4DoEinjCWAj8R4CgVAZm6bksV1qY12rjSglQibiTJtsCNNGHrLB2AkfaJJWZ8RASUMWy1UabWxodc4GtWgcIMM1WScYSoml5gQZ5RW+8JgSx7ZGsttr7Uny8MOuto5-x-DJM2+QEj+LmmkSWdEI5l2lujWuuNsRIZJGhjWtwCLzSdimjpDKRJzjnRPdaMszpHgdD8NOAgvAIBwHEGSzCGCkwAFpcz9Fg1XKwttUPpVmmQMAFT6UNFcI6KwroRjOBBRaZ06dpDYfag0N46rIlIrTMrR0eIhzunrrU72tFQ0CKQpRkWCAnhXHUGoGW9snRy06AKaRkEmj5vTjYXjmDKLKFtgwjwcVvD9n6gKUuNhk1yFLHJgq+zyrIEqgppM8plPfFU50Mkg0ZDgKuM9ewkLal3B9lx8lvN8myHMy2SFbrsSvU6LMgeDmfROfGq5jwTRDPfOpQLPzEy9zthwVYFw+gbQYwi69KLha3Oxc81k-KJbdYJeKElhl6JX3ujHjocSCycQ-u9nve4GUbTPUbpV6jl9XTfDkARPElgMYPAjrA8Y4kx61IUd114eqySdnAd6XQh6koaC6tIhQVsTGjmcbNgYCHXjeEUG8ickSfQfyg1syl7jPHeIo4CnDkpVvxOdC6NKB96muEvWVsm8h9sjyuAZDQeFvbpuaRJj7CUvuXf4eSjFJNqXqX27oUadTx5jnFK9yHbSzIYm+0V67OzBB7NKgw-bAJFCWDaOJeKbw4mvDeyJUYQknT3Fh2i678WyZTQp3oGpODzoIqsIdxZ9hWjWlHFCuZl6rXXtjRThhUVmWQrAi9xnugvKS-GFpH4s1UC8FKuQamEB9sPEcLhIUcg3hln0M0vqqXtcuAeCavwQA */
     id: "acidDrain",
     initial: "idle",
     context: initialContext,
@@ -261,29 +262,32 @@ export const acidDrainMachine = createMachine(
   },
   {
     actions: {
-      // Этап 1
+      // ========== ЭТАП 1 ==========
       collectScheme6_1V: assign({
-        valves: (ctx) => ({
-          ...ctx.valves,
+        valves: ({ context }) => ({
+          ...context.valves,
           "12": "closed",
           "13": "closed",
           "14": "closed",
         }),
       }),
+
       openValve12: assign({
-        valves: (ctx) => ({ ...ctx.valves, "12": "open" }),
-      }),
-      closeValve13: assign({
-        valves: (ctx) => ({ ...ctx.valves, "13": "closed" }),
-      }),
-      closeValve14: assign({
-        valves: (ctx) => ({ ...ctx.valves, "14": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "12": "open" }),
       }),
 
-      // Этап 2
+      closeValve13: assign({
+        valves: ({ context }) => ({ ...context.valves, "13": "closed" }),
+      }),
+
+      closeValve14: assign({
+        valves: ({ context }) => ({ ...context.valves, "14": "closed" }),
+      }),
+
+      // ========== ЭТАП 2 ==========
       collectScheme6_5: assign({
-        valves: (ctx) => ({
-          ...ctx.valves,
+        valves: ({ context }) => ({
+          ...context.valves,
           "1": "closed",
           "5": "closed",
           "3": "closed",
@@ -292,155 +296,200 @@ export const acidDrainMachine = createMachine(
           "2": "closed",
         }),
       }),
-      openValve1: assign({ valves: (ctx) => ({ ...ctx.valves, "1": "open" }) }),
-      openValve5: assign({ valves: (ctx) => ({ ...ctx.valves, "5": "open" }) }),
-      closeValve3_2: assign({
-        valves: (ctx) => ({ ...ctx.valves, "3/2": "closed" }),
-      }),
-      openValve3: assign({ valves: (ctx) => ({ ...ctx.valves, "3": "open" }) }),
-      openValve3_1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "3/1": "open" }),
-      }),
-      openValve2_1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "2/1": "open" }),
-      }),
-      openValve2: assign({ valves: (ctx) => ({ ...ctx.valves, "2": "open" }) }),
 
-      // Этап 3
+      openValve1: assign({
+        valves: ({ context }) => ({ ...context.valves, "1": "open" }),
+      }),
+
+      openValve5: assign({
+        valves: ({ context }) => ({ ...context.valves, "5": "open" }),
+      }),
+
+      closeValve3_2: assign({
+        valves: ({ context }) => ({ ...context.valves, "3/2": "closed" }),
+      }),
+
+      openValve3: assign({
+        valves: ({ context }) => ({ ...context.valves, "3": "open" }),
+      }),
+
+      openValve3_1: assign({
+        valves: ({ context }) => ({ ...context.valves, "3/1": "open" }),
+      }),
+
+      openValve2_1: assign({
+        valves: ({ context }) => ({ ...context.valves, "2/1": "open" }),
+      }),
+
+      openValve2: assign({
+        valves: ({ context }) => ({ ...context.valves, "2": "open" }),
+      }),
+
+      // ========== ЭТАП 3 ==========
       startPump86C: assign({
-        pumps: (ctx) => ({
-          ...ctx.pumps,
+        pumps: ({ context }) => ({
+          ...context.pumps,
           "86C": { status: "running", color: "green", current: 60 },
         }),
       }),
-      openValve4: assign({ valves: (ctx) => ({ ...ctx.valves, "4": "open" }) }),
-      startFilling: assign({
-        valves: (ctx) => ({ ...ctx.valves, "4/1": "opening" }),
-        tanks: (ctx) => ({
-          ...ctx.tanks,
-          "6.5": { ...ctx.tanks["6.5"], level: 8.05, color: "green" },
-        }),
-      }),
-      completeFilling: assign({
-        valves: (ctx) => ({ ...ctx.valves, "4/1": "open" }),
-      }),
-      closeValve4_1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "4/1": "closed" }),
+
+      openValve4: assign({
+        valves: ({ context }) => ({ ...context.valves, "4": "open" }),
       }),
 
-      // Этап 4
-      closeValve4: assign({
-        valves: (ctx) => ({ ...ctx.valves, "4": "closed" }),
+      startFilling: assign({
+        valves: ({ context }) => ({ ...context.valves, "4/1": "opening" }),
+        tanks: ({ context }) => ({
+          ...context.tanks,
+          "6.5": { ...context.tanks["6.5"], level: 8.05, color: "green" },
+        }),
       }),
+
+      completeFilling: assign({
+        valves: ({ context }) => ({ ...context.valves, "4/1": "open" }),
+      }),
+
+      closeValve4_1: assign({
+        valves: ({ context }) => ({ ...context.valves, "4/1": "closed" }),
+      }),
+
+      // ========== ЭТАП 4 ==========
+      closeValve4: assign({
+        valves: ({ context }) => ({ ...context.valves, "4": "closed" }),
+      }),
+
       stopPump86C: assign({
-        pumps: (ctx) => ({
-          ...ctx.pumps,
+        pumps: ({ context }) => ({
+          ...context.pumps,
           "86C": { status: "stopped", color: "gray", current: 0 },
         }),
       }),
+
       closeValve2: assign({
-        valves: (ctx) => ({ ...ctx.valves, "2": "closed" }),
-      }),
-      closeValve2_1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "2/1": "closed" }),
-      }),
-      closeValve3_1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "3/1": "closed" }),
-      }),
-      closeValve3: assign({
-        valves: (ctx) => ({ ...ctx.valves, "3": "closed" }),
-      }),
-      closeValve5: assign({
-        valves: (ctx) => ({ ...ctx.valves, "5": "closed" }),
-      }),
-      closeValve1: assign({
-        valves: (ctx) => ({ ...ctx.valves, "1": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "2": "closed" }),
       }),
 
-      // Этап 6
+      closeValve2_1: assign({
+        valves: ({ context }) => ({ ...context.valves, "2/1": "closed" }),
+      }),
+
+      closeValve3_1: assign({
+        valves: ({ context }) => ({ ...context.valves, "3/1": "closed" }),
+      }),
+
+      closeValve3: assign({
+        valves: ({ context }) => ({ ...context.valves, "3": "closed" }),
+      }),
+
+      closeValve5: assign({
+        valves: ({ context }) => ({ ...context.valves, "5": "closed" }),
+      }),
+
+      closeValve1: assign({
+        valves: ({ context }) => ({ ...context.valves, "1": "closed" }),
+      }),
+
+      // ========== ЭТАП 6 ==========
       openValvesGroup1: assign({
-        valves: (ctx) => ({
-          ...ctx.valves,
+        valves: ({ context }) => ({
+          ...context.valves,
           "6": "open",
           "9": "open",
           "7": "open",
           "8": "open",
         }),
       }),
+
       closeValve7: assign({
-        valves: (ctx) => ({ ...ctx.valves, "7": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "7": "closed" }),
       }),
+
       openValve10: assign({
-        valves: (ctx) => ({ ...ctx.valves, "10": "open" }),
+        valves: ({ context }) => ({ ...context.valves, "10": "open" }),
       }),
+
       startPump93: assign({
-        pumps: (ctx) => ({
-          ...ctx.pumps,
+        pumps: ({ context }) => ({
+          ...context.pumps,
           "93": { status: "running", color: "green", current: 30 },
         }),
       }),
+
       startFillingCistern: assign({
-        valves: (ctx) => ({ ...ctx.valves, "11": "open" }),
-        indicators: (ctx) => ({ ...ctx.indicators, temperature: 35 }),
-        tanks: (ctx) => ({
-          ...ctx.tanks,
-          "6.1B": { ...ctx.tanks["6.1B"], level: 8.05 },
+        valves: ({ context }) => ({ ...context.valves, "11": "open" }),
+        indicators: ({ context }) => ({
+          ...context.indicators,
+          temperature: { value: 35 },
+        }),
+        tanks: ({ context }) => ({
+          ...context.tanks,
+          "6.1B": { ...context.tanks["6.1B"], level: 8.05 },
         }),
       }),
+
       setLine6_10Red: assign({
-        indicators: (ctx) => ({
-          ...ctx.indicators,
+        indicators: ({ context }) => ({
+          ...context.indicators,
           line6_10: { active: true, color: "red" },
         }),
       }),
+
       closeValve11: assign({
-        valves: (ctx) => ({ ...ctx.valves, "11": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "11": "closed" }),
       }),
+
       stopPump93: assign({
-        pumps: (ctx) => ({
-          ...ctx.pumps,
+        pumps: ({ context }) => ({
+          ...context.pumps,
           "93": { status: "stopped", color: "gray", current: 0 },
         }),
       }),
+
       closeValve10: assign({
-        valves: (ctx) => ({ ...ctx.valves, "10": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "10": "closed" }),
       }),
+
       closeValve8: assign({
-        valves: (ctx) => ({ ...ctx.valves, "8": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "8": "closed" }),
       }),
+
       closeValve9: assign({
-        valves: (ctx) => ({ ...ctx.valves, "9": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "9": "closed" }),
       }),
+
       closeValve12: assign({
-        valves: (ctx) => ({ ...ctx.valves, "12": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "12": "closed" }),
       }),
+
       closeValve6: assign({
-        valves: (ctx) => ({ ...ctx.valves, "6": "closed" }),
+        valves: ({ context }) => ({ ...context.valves, "6": "closed" }),
       }),
     },
 
     guards: {
-      isStage1Complete: (ctx) =>
-        ctx.valves["12"] === "open" &&
-        ctx.valves["13"] === "closed" &&
-        ctx.valves["14"] === "closed",
-      isStage2Complete: (ctx) =>
-        ctx.valves["1"] === "open" &&
-        ctx.valves["5"] === "open" &&
-        ctx.valves["3/2"] === "closed" &&
-        ctx.valves["3"] === "open" &&
-        ctx.valves["3/1"] === "open" &&
-        ctx.valves["2/1"] === "open" &&
-        ctx.valves["2"] === "open",
-      isStage4Complete: (ctx) =>
-        ctx.valves["4"] === "closed" &&
-        ctx.pumps["86C"].status === "stopped" &&
-        ctx.valves["2"] === "closed" &&
-        ctx.valves["2/1"] === "closed" &&
-        ctx.valves["3/1"] === "closed" &&
-        ctx.valves["3"] === "closed" &&
-        ctx.valves["5"] === "closed" &&
-        ctx.valves["1"] === "closed",
+      isStage1Complete: ({ context }) =>
+        context.valves["12"] === "open" &&
+        context.valves["13"] === "closed" &&
+        context.valves["14"] === "closed",
+
+      isStage2Complete: ({ context }) =>
+        context.valves["1"] === "open" &&
+        context.valves["5"] === "open" &&
+        context.valves["3/2"] === "closed" &&
+        context.valves["3"] === "open" &&
+        context.valves["3/1"] === "open" &&
+        context.valves["2/1"] === "open" &&
+        context.valves["2"] === "open",
+
+      isStage4Complete: ({ context }) =>
+        context.valves["4"] === "closed" &&
+        context.pumps["86C"].status === "stopped" &&
+        context.valves["2"] === "closed" &&
+        context.valves["2/1"] === "closed" &&
+        context.valves["3/1"] === "closed" &&
+        context.valves["3"] === "closed" &&
+        context.valves["5"] === "closed" &&
+        context.valves["1"] === "closed",
     },
   },
 );
