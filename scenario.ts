@@ -1,6 +1,6 @@
 import { createMachine, assign } from "xstate";
 
-// Определите типы
+
 interface Tank {
   level: number;
   max: number;
