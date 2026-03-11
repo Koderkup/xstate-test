@@ -1,0 +1,28 @@
+{
+  "name": "xstate-test",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Koderkup/xstate-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Koderkup/xstate-test/issues"
+  },
+  "homepage": "https://github.com/Koderkup/xstate-test#readme",
+  "dependencies": {
+    "xstate": "^5.28.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.4.0",
+    "typescript": "^5.9.3"
+  }
+}
