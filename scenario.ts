@@ -1,6 +1,5 @@
 import { createMachine, assign } from "xstate";
 
-
 interface Tank {
   level: number;
   max: number;
@@ -37,8 +36,11 @@ interface AcidDrainContext {
     ampermeter_93: { value: number };
     temperature: { value: number };
   };
+  notification: {
+    message: string;
+    timestamp: number;
+  } | null;
 }
-
 
 type AcidDrainEvent =
   | { type: "START" }
@@ -78,7 +80,6 @@ type AcidDrainEvent =
   | { type: "CLOSE_6" }
   | { type: "COMPLETE" };
 
-
 const initialContext: AcidDrainContext = {
   tanks: {
     "6.1A": { level: 7.0, max: 8.05, color: "blue" },
@@ -98,7 +99,7 @@ const initialContext: AcidDrainContext = {
     "2/1": "closed",
     "3": "closed",
     "3/1": "closed",
-    "3/2": "closed",
+    "3/2": "open",
     "4": "closed",
     "4/1": "closed",
     "5": "closed",
@@ -109,8 +110,8 @@ const initialContext: AcidDrainContext = {
     "10": "closed",
     "11": "closed",
     "12": "closed",
-    "13": "closed",
-    "14": "closed",
+    "13": "open",
+    "14": "open",
   },
   indicators: {
     line6_10: { active: false, color: "gray" },
@@ -118,11 +119,11 @@ const initialContext: AcidDrainContext = {
     ampermeter_93: { value: 0 },
     temperature: { value: 20 },
   },
+  notification: null,
 };
 
 export const acidDrainMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMDGBLCARATs9AdgHSYA2YAxAMoAqAggEo0DaADALqKgAOA9rOgAu6XgS4gAHogCMAFgDsRAKwBONSvnSVADiXbp8pQBoQAT0SztrIgGZ5rVtIBMsp9JuqnANgC+Pk2iYuPjEsILIMNIUAMIA8gAy8QCi0TQA+lTRABJJALJJaV5p0gBqbJxIIHwCwqLiUghOOk62ho5eSkr2SjYm5gh21l72DtperCpyXX4BGNh4hERhEWBRsQAKSQByxU7l4tVCImKVDTaOKkRqdsNKTk42Xip9iE7yskT3Dqx32mrOchmIEC8xCS3CkRi8ViVAK7n2lUOtROoDOrCc1nchmkt3kTm07xeCAMinkIwu9mGuiBIOCi2WkOi0NhxVkCJ4-COdVOiHOGKIjicShxhkmxjMiH0ti0ajGwtkCpUThpczpoQhqwoWySAA0WBwDpzkfULB0iPICUoHF5tN5VAoibIVEoiK4HM5NPpZKx5Cqggt1SsnDEEslUhlsnkCkUlOyqkbjibieiWtpLaxvVabG5nhLibIesoRo8VLJBm8-aD6RrgxttsU40jEzzk+MiAYrT8LR53NIie4uu2MawbI8XLInsr-MDVQHwUGKHWdrGDYiE9zUTIfpdvEKfdmmn9ZP3vENiyOfg9OpW1fOYMGmTCCjY0ntVxyas3N8nC3pnHdWGGH1AP7HEPi+dEnjGBwp1mf0wQZMBa02HYbEbdcUUkLdVE+Lw93kA8dFLftANJEYHi8Sj5BtGwbznRDkPrF9pHQz8Nywn8Pg8PCej-b0+zzDRpFsYcMRsBQeidOiEJrRcUNfBt33jNjMIaaQfi4pQeI8L1HCJAkPgJd17Hxc53Gk6sFyXV9WK5VTsJ3Hj93uIjjzzMltFdYcsQmUjfWnWl6Nk7U9Vs40WyFFoNE7bMumorxejzaQuk87MHFkdS7igizAxgGwiG4ABXABbbgqHCHBBAodYAFVcnWDJ6CYJIsDCr8OM0S4PHdbxtAndxEv6HEbGE7wDAmKDpDkWQcrvMB8t4bgwAIEpkFIAA3MBZAoEo6HiEoCiXFq2vYtTWClKbIscTRhSUNyhoS0avHGlRJum2bEIWpaVrWzbZGKCgADEAElEjSOJ6uSGgkhO+z81HV07GFIVvSFW1+xtTy8PSgsDDcaiPo1L7ltWjatoBiRlkEMAiGQAAzamcAACmHBwAEoKECmSVmJn6yf+lilKbU6ZDLfKy2xFH0T0Jx+1UF1xozKaenxQDCZ5ohUFIfgwFJv6Ad2-aCkfWFWqFjCk2kPrrG+BxqPeCYLQx7MBWdDNzhGhV5BUdWYG2k2CjZc2VKTb0JiIXR3VHPDnq8OX7lsN2unRZWJ19rbqBoDY0jGaJYdDhx8vOyWRgVOOktcF1SytHp7C0Nx0-95kCjfCoPzsgvw+ixxo59Hpy6G7NLidGuR1tG13kbqEnwUwW2+UjuWzDl1AIJBKxbGFwTwRjMrQUQDxLuqeA7SZj86XhwV4n9fR03+6ZHcLxlDdiWFS+WCZ3gyy-enlk0ODxe34w6XG7gNcYhhHgkW9O2AsGYMwuB0MMY+zc0grnnsLOGwCrhtDAX3SBgkyxECeFmTQXYVbIJnnPQ0IcL7qQjioG4GV1KF30goT4sDRwWg6FoXwAVZzcx-iFfU6CLYtjuESUSRDhwFitF6Sw6clAhkSCkdImQcj5DSDQBgdAthUEBkkBg58gE2E8m0Rw7RHrdAkTBKR6VOjnWmtodOT9FrLQAOI4F4IVbgURDYHSoGkI6ZsRE0O-CNUxTo1A2jLt7AS-QmgWlsQfKwVsRy8LglWXKYAn5ax1nrMA8gdp7QOuDZuwTqGAI4jaF02gkaCnSu8bQEiNBY2HAlFJVhHjOKIK4vmm11JFKNoElCx0AHhW-OpSwXlOxaQeLFe+jQWlJPaY4Tp6TP6ZLmk-ZYlV1glW4Aw6qdUGq0EYNDcpa5QkcTkHIT46YTEMN0K9ZpiTsbJNWWk7pvT8lTV-nCKhlzKlqSsJ5JUVp1J-HOmMZpDCiEjC8N6HQeg058K-lklx30flREpuEamtMGZgGZqzVgHMubf2yT0zFv1VgAvbuM65z1TG2wIg8JUPwJEEmEmy7cpZLBjBmqizZiEcnawEAQKAVAwAAEdCrLVQJQWg2cGFGOuc6S4Vs2gtLxBPDltTsHWnRGMOw5lBW3mFZrUVhAJXStlQQeVfziisBVWpNVVw6kaGohMfEEiLSKAAj8J4wx3BONNUFFYIrOTislTKuVlAT7aGdTIV6LRuqjDcK4DoEinjCWAj8R4CgVAZm6bksV1qY12rjSglQibiTJtsCNNGHrLB2AkfaJJWZ8RASUMWy1UabWxodc4GtWgcIMM1WScYSoml5gQZ5RW+8JgSx7ZGsttr7Uny8MOuto5-x-DJM2+QEj+LmmkSWdEI5l2lujWuuNsRIZJGhjWtwCLzSdimjpDKRJzjnRPdaMszpHgdD8NOAgvAIBwHEGSzCGCkwAFpcz9Fg1XKwttUPpVmmQMAFT6UNFcI6KwroRjOBBRaZ06dpDYfag0N46rIlIrTMrR0eIhzunrrU72tFQ0CKQpRkWCAnhXHUGoGW9snRy06AKaRkEmj5vTjYXjmDKLKFtgwjwcVvD9n6gKUuNhk1yFLHJgq+zyrIEqgppM8plPfFU50Mkg0ZDgKuM9ewkLal3B9lx8lvN8myHMy2SFbrsSvU6LMgeDmfROfGq5jwTRDPfOpQLPzEy9zthwVYFw+gbQYwi69KLha3Oxc81k-KJbdYJeKElhl6JX3ujHjocSCycQ-u9nve4GUbTPUbpV6jl9XTfDkARPElgMYPAjrA8Y4kx61IUd114eqySdnAd6XQh6koaC6tIhQVsTGjmcbNgYCHXjeEUG8ickSfQfyg1syl7jPHeIo4CnDkpVvxOdC6NKB96muEvWVsm8h9sjyuAZDQeFvbpuaRJj7CUvuXf4eSjFJNqXqX27oUadTx5jnFK9yHbSzIYm+0V67OzBB7NKgw-bAJFCWDaOJeKbw4mvDeyJUYQknT3Fh2i678WyZTQp3oGpODzoIqsIdxZ9hWjWlHFCuZl6rXXtjRThhUVmWQrAi9xnugvKS-GFpH4s1UC8FKuQamEB9sPEcLhIUcg3hln0M0vqqXtcuAeCavwQA */
     id: "acidDrain",
     initial: "idle",
     context: initialContext,
@@ -168,7 +169,7 @@ export const acidDrainMachine = createMachine(
         initial: "pumpStart",
         states: {
           pumpStart: {
-            entry: "startPump86C",
+            entry: ["startPump86C", "notifyPump86CStarted"],
             on: { PUMP_STARTED: "openValve4" },
           },
           openValve4: {
@@ -176,7 +177,7 @@ export const acidDrainMachine = createMachine(
             on: { VALVE_OPENED: "openValve4_1" },
           },
           openValve4_1: {
-            entry: "startFilling",
+            entry: ["startFilling", "notifyFillingStarted"],
             on: { FILL_COMPLETE: "closeValve4_1" },
             after: {
               20000: { target: "closeValve4_1", actions: "completeFilling" },
@@ -219,7 +220,7 @@ export const acidDrainMachine = createMachine(
         initial: "openGroup1",
         states: {
           openGroup1: {
-            entry: "openValvesGroup1",
+            entry: ["openValvesGroup1", "notifyLineFilled"],
             on: { VALVES_OPENED: "closeValve7" },
           },
           closeValve7: {
@@ -227,15 +228,15 @@ export const acidDrainMachine = createMachine(
             on: { VALVE_CLOSED: "openValve10" },
           },
           openValve10: {
-            entry: "openValve10",
+            entry: ["openValve10", "notifyImpellerFilling"],
             on: { VALVE_OPENED: "startPump93" },
           },
           startPump93: {
-            entry: "startPump93",
+            entry: ["startPump93", "notifyPump93Started"],
             on: { PUMP_STARTED: "openValve11" },
           },
           openValve11: {
-            entry: "startFillingCistern",
+            entry: ["startFillingCistern", "notifyCisternFilling"],
             on: { CLOSE_11: "closingSequence" },
             after: { 20000: { actions: "setLine6_10Red" } },
           },
@@ -333,6 +334,12 @@ export const acidDrainMachine = createMachine(
         }),
       }),
 
+      notifyPump86CStarted: () => {
+        console.log(
+          "УВЕДОМЛЕНИЕ: Стрелка амперметра меняет положение (60А)",
+        );
+      },
+
       openValve4: assign({
         valves: ({ context }) => ({ ...context.valves, "4": "open" }),
       }),
@@ -342,8 +349,15 @@ export const acidDrainMachine = createMachine(
         tanks: ({ context }) => ({
           ...context.tanks,
           "6.5": { ...context.tanks["6.5"], level: 8.05, color: "green" },
+          "6.1B": { ...context.tanks["6.1B"], level: 2.97 },
         }),
       }),
+
+      notifyFillingStarted: () => {
+        console.log(
+          "УВЕДОМЛЕНИЕ: Идет заполнение 6.5. Показание амперметра 60А (до 134 А)",
+        );
+      },
 
       completeFilling: assign({
         valves: ({ context }) => ({ ...context.valves, "4/1": "open" }),
@@ -400,6 +414,10 @@ export const acidDrainMachine = createMachine(
         }),
       }),
 
+      notifyLineFilled: () => {
+        console.log("УВЕДОМЛЕНИЕ: Линия заполнена (6.10 стала зеленой)");
+      },
+
       closeValve7: assign({
         valves: ({ context }) => ({ ...context.valves, "7": "closed" }),
       }),
@@ -408,12 +426,22 @@ export const acidDrainMachine = createMachine(
         valves: ({ context }) => ({ ...context.valves, "10": "open" }),
       }),
 
+      notifyImpellerFilling: () => {
+        console.log("УВЕДОМЛЕНИЕ: Заполняется улитка рабочего колеса");
+      },
+
       startPump93: assign({
         pumps: ({ context }) => ({
           ...context.pumps,
           "93": { status: "running", color: "green", current: 30 },
         }),
       }),
+
+      notifyPump93Started: () => {
+        console.log(
+          "УВЕДОМЛЕНИЕ: Стрелка амперметра меняет положение (30А)",
+        );
+      },
 
       startFillingCistern: assign({
         valves: ({ context }) => ({ ...context.valves, "11": "open" }),
@@ -426,6 +454,15 @@ export const acidDrainMachine = createMachine(
           "6.1B": { ...context.tanks["6.1B"], level: 8.05 },
         }),
       }),
+
+      notifyCisternFilling: () => {
+        console.log(
+          "УВЕДОМЛЕНИЕ: Температура на поверхности кислотопровода стала выше, шум-движение среды",
+        );
+        console.log(
+          "УВЕДОМЛЕНИЕ: Показание амперметра при нормальной работе насоса 30А (до 56,2 А)",
+        );
+      },
 
       setLine6_10Red: assign({
         indicators: ({ context }) => ({
