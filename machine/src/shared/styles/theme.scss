@@ -1,0 +1,35 @@
+$color-white: #ffffff;
+$color-gray-lighter: #003A67;
+$color-blue-lighter: #00467E;
+$color-blue-darker: #002542;
+$color-gray-light: #efefef;
+$color-gray: #c4c4c4;
+$color-gray-dark: #7b7b7b;
+$color-black-light: #404040;
+$color-black-darker: #303030;
+$color-black: #303030;
+$color-blue: #4a94d0;
+$color-green: #a2e87e;
+$color-yellow: #FDC427;
+$color-red: #d24e4e;
+
+$color-notification-bg: #FEE293;
+$color-notification-text: #303030;
+
+$color-white-transparent: rgba(255, 255, 255, 0.5);
+
+$text-main: 'Proxima Nova', sans-serif;
+$text-sm: 12px;
+$text-md: 14px;
+$text-lg: 16px;
+$text-xl: 18px;
+
+$radius-sm: 3px;
+$radius-md: 5px;
+$radius-none: 0;
+
+$shadow-sm:
+  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+  rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+$shadow-md: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+$shadow-notification: rgba(0, 0, 0, 0.5) 0px 2px 6px 0px;

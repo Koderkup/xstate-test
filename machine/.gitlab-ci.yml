@@ -1,0 +1,23 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  #tags:
+    #- macos
+  script: |
+    export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin
+    brew install nvm --force --quiet
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+    nvm install 18
+    npm install
+    npm run build
+    npm run package
+    echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    chmod 600 ~/.ssh/id_rsa
+    echo "Деплой ветки $CI_COMMIT_REF_NAME"
+    scp -P 2215 -r -o StrictHostKeyChecking=no dist/* tachyon@192.168.135.10:/home/tachyon/lms/$CI_COMMIT_REF_NAME/
+    scp -P 2215 -r -o StrictHostKeyChecking=no scorm/* tachyon@192.168.135.10:/home/tachyon/lms/$CI_COMMIT_REF_NAME/
+    ssh -p 2215 tachyon@192.168.135.10 chmod 755 /home/tachyon/lms/$CI_COMMIT_REF_NAME/

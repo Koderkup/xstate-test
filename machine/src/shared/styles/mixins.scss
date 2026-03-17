@@ -1,0 +1,21 @@
+@use './theme' as *;
+
+@mixin transition($properties, $duration: 0.2s, $easing: ease-out) {
+  transition-property: #{$properties};
+  transition-duration: $duration;
+  will-change: #{$properties};
+  transition-timing-function: $easing;
+}
+
+@mixin border($width: 1px, $color: $color-gray-lighter) {
+  border: $width solid $color;
+}
+
+@mixin border-white($width: 1px, $color: $color-white) {
+  border: $width solid $color;
+}
+
+@mixin size($size) {
+  width: $size;
+  height: $size;
+}
